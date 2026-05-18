@@ -18,6 +18,13 @@ int udpInit(UDPContext *udp) {
         return -1;
     }
 
+            // ADICIONAR ESTE BLOCO:
+            int tos = 0xB8; // 0xB8 = DSCP 46 (Expedited Forwarding) + 2 bits ECN
+            if (setsockopt(udp->socket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos)) < 0) {
+                perror("Erro ao definir QoS (DSCP)");
+                // Não interrompemos, mas registramos que o QoS falhou
+            }
+            
     udp->servAddr.sin_family = AF_INET;
     udp->servAddr.sin_port = htons(udp->dstPort);
     inet_aton(udp->dstIp, &udp->servAddr.sin_addr);
