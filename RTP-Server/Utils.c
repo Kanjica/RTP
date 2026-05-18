@@ -62,6 +62,12 @@ int readFile(uint8_t **stream, int *len, const char *file) {
     return 0;
 }
 
+        // SUBSTITUIR A LÓGICA DE malloc(size) POR ESTA ESTRUTURA DE STREAMING:
+        int readFileChunk(FILE *fp, uint8_t *buf, int max_size) {
+            if (!fp) return -1;
+            return (int)fread(buf, 1, max_size, fp);
+        }
+
 void dumpHex(const uint8_t *ptr, int len) {
     printf("%p [%d]: ", (void*)ptr, len);
     for (int i = 0; i < len; ++i) {
